@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RGB Gaming Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Main calculator container -->
+  <div class="calc-wrapper">
+
+    <!-- Decorative corner accents -->
+    <span class="corner corner-tl"></span>
+    <span class="corner corner-tr"></span>
+    <span class="corner corner-bl"></span>
+    <span class="corner corner-br"></span>
+
+    <!-- Header label -->
+    <div class="calc-header">
+      <span class="header-dot"></span>
+      <span class="header-title">CALC // v2.0</span>
+      <span class="header-dot"></span>
+    </div>
+
+    <!-- Display panel -->
+    <div class="display" id="display" aria-live="polite" aria-label="Calculator display">
+      <!-- Expression (top, smaller) -->
+      <div class="display-expression" id="expression" aria-label="Expression">&nbsp;</div>
+      <!-- Result / current entry (large) -->
+      <div class="display-result" id="result">0</div>
+    </div>
+
+    <!-- Button grid -->
+    <div class="btn-grid">
+
+      <!-- Row 1 -->
+      <button class="btn btn-func" data-action="clear"    aria-label="All Clear">AC</button>
+      <button class="btn btn-func" data-action="delete"   aria-label="Delete last digit">DEL</button>
+      <button class="btn btn-func" data-action="percent"  aria-label="Percent">%</button>
+      <button class="btn btn-op"   data-action="operator" data-value="÷" aria-label="Divide">÷</button>
+
+      <!-- Row 2 -->
+      <button class="btn btn-num"  data-action="digit"    data-value="7">7</button>
+      <button class="btn btn-num"  data-action="digit"    data-value="8">8</button>
+      <button class="btn btn-num"  data-action="digit"    data-value="9">9</button>
+      <button class="btn btn-op"   data-action="operator" data-value="×" aria-label="Multiply">×</button>
+
+      <!-- Row 3 -->
+      <button class="btn btn-num"  data-action="digit"    data-value="4">4</button>
+      <button class="btn btn-num"  data-action="digit"    data-value="5">5</button>
+      <button class="btn btn-num"  data-action="digit"    data-value="6">6</button>
+      <button class="btn btn-op"   data-action="operator" data-value="−" aria-label="Subtract">−</button>
+
+      <!-- Row 4 -->
+      <button class="btn btn-num"  data-action="digit"    data-value="1">1</button>
+      <button class="btn btn-num"  data-action="digit"    data-value="2">2</button>
+      <button class="btn btn-num"  data-action="digit"    data-value="3">3</button>
+      <button class="btn btn-op"   data-action="operator" data-value="+" aria-label="Add">+</button>
+
+      <!-- Row 5 -->
+      <button class="btn btn-num"  data-action="digit"    data-value="0">0</button>
+      <button class="btn btn-num"  data-action="decimal"                  aria-label="Decimal point">.</button>
+      <button class="btn btn-eq"   data-action="equals"                   aria-label="Equals">=</button>
+
+    </div>
+
+    <!-- Footer scan-line decoration -->
+    <div class="calc-footer">
+      <span class="footer-line"></span>
+      <span class="footer-text">GAMING SYSTEMS</span>
+      <span class="footer-line"></span>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

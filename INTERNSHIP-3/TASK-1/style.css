@@ -1,0 +1,432 @@
+/* ============================================================
+   GAMING RGB CALCULATOR — style.css
+   Theme: Pure Black + Neon Green only
+   ============================================================ */
+
+/* ---------- CSS Custom Properties ---------- */
+:root {
+  --black:       #000000;
+  --green:       #39FF14;
+  --green-dim:   rgba(57, 255, 20, 0.15);
+  --green-mid:   rgba(57, 255, 20, 0.35);
+  --green-glow:  rgba(57, 255, 20, 0.7);
+  --font-main:   'Courier New', Courier, monospace;
+  --border-r:    6px;
+  --transition:  0.18s ease;
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: var(--font-main);
+  /* subtle scanline texture */
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(57, 255, 20, 0.015) 2px,
+    rgba(57, 255, 20, 0.015) 4px
+  );
+  overflow: hidden;
+}
+
+/* ---------- Animated ambient background glow ---------- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(57,255,20,0.05) 0%, transparent 70%);
+  animation: ambientPulse 4s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes ambientPulse {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
+}
+
+/* ---------- Calculator Wrapper ---------- */
+.calc-wrapper {
+  position: relative;
+  z-index: 1;
+  width: min(360px, 94vw);
+  background: rgba(0, 0, 0, 0.92);
+  border: 1.5px solid var(--green);
+  border-radius: 12px;
+  padding: 20px 18px 18px;
+
+  /* Glassmorphism */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  /* Layered glow shadow */
+  box-shadow:
+    0 0 10px  var(--green-mid),
+    0 0 30px  rgba(57,255,20,0.2),
+    0 0 60px  rgba(57,255,20,0.08),
+    inset 0 0 30px rgba(57,255,20,0.03);
+
+  /* Pulsing border animation via outline trick */
+  animation: borderPulse 3s ease-in-out infinite;
+}
+
+@keyframes borderPulse {
+  0%, 100% { box-shadow: 0 0 10px var(--green-mid), 0 0 30px rgba(57,255,20,0.2), 0 0 60px rgba(57,255,20,0.08), inset 0 0 30px rgba(57,255,20,0.03); }
+  50%       { box-shadow: 0 0 18px var(--green-glow), 0 0 50px rgba(57,255,20,0.35), 0 0 90px rgba(57,255,20,0.14), inset 0 0 40px rgba(57,255,20,0.06); }
+}
+
+/* ---------- Corner Accents (polygon feel) ---------- */
+.corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--green);
+  border-style: solid;
+  z-index: 2;
+}
+.corner-tl { top: -1px; left: -1px;  border-width: 2px 0 0 2px; border-radius: 12px 0 0 0; }
+.corner-tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; border-radius: 0 12px 0 0; }
+.corner-bl { bottom: -1px; left: -1px;  border-width: 0 0 2px 2px; border-radius: 0 0 0 12px; }
+.corner-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-radius: 0 0 12px 0; }
+
+/* ---------- Header ---------- */
+.calc-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.header-title {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--green);
+  text-shadow: 0 0 8px var(--green);
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.header-dot {
+  display: inline-block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: dotBlink 1.8s ease-in-out infinite alternate;
+}
+.header-dot:last-child { animation-delay: 0.9s; }
+
+@keyframes dotBlink {
+  from { opacity: 0.3; }
+  to   { opacity: 1; }
+}
+
+/* ---------- Display Panel ---------- */
+.display {
+  background: #000;
+  border: 1.5px solid var(--green);
+  border-radius: var(--border-r);
+  padding: 10px 14px 12px;
+  margin-bottom: 16px;
+  min-height: 88px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  box-shadow:
+    inset 0 0 20px rgba(57,255,20,0.06),
+    0 0 10px rgba(57,255,20,0.15);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Horizontal scan-line sweep on display */
+.display::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(57,255,20,0.3), transparent);
+  animation: scanLine 3.5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanLine {
+  from { top: -2px; }
+  to   { top: 100%; }
+}
+
+.display-expression {
+  font-size: 0.7rem;
+  color: rgba(57,255,20,0.5);
+  min-height: 1.1em;
+  word-break: break-all;
+  text-align: right;
+  letter-spacing: 0.05em;
+  transition: all var(--transition);
+  text-shadow: 0 0 6px rgba(57,255,20,0.4);
+  padding-bottom: 4px;
+}
+
+.display-result {
+  font-size: 2.4rem;
+  color: var(--green);
+  text-shadow:
+    0 0 8px  var(--green),
+    0 0 20px rgba(57,255,20,0.6),
+    0 0 40px rgba(57,255,20,0.2);
+  word-break: break-all;
+  text-align: right;
+  letter-spacing: -0.02em;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+  line-height: 1.1;
+}
+
+/* Flash animation on update */
+.display-result.flash {
+  animation: resultFlash 0.25s ease;
+}
+
+@keyframes resultFlash {
+  0%   { opacity: 1; transform: scale(1); }
+  40%  { opacity: 0.5; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ---------- Button Grid ---------- */
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+/* ---------- Base Button Styles ---------- */
+.btn {
+  position: relative;
+  background: #000;
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-family: var(--font-main);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: var(--border-r);
+  padding: 0;
+  height: 58px;
+  cursor: pointer;
+  overflow: hidden;
+
+  /* Subtle inner sheen */
+  background-image: linear-gradient(160deg, rgba(57,255,20,0.04) 0%, transparent 60%);
+
+  /* 3D base shadow */
+  box-shadow:
+    0 4px 0 rgba(57,255,20,0.25),
+    0 0 6px rgba(57,255,20,0.1);
+
+  transition:
+    box-shadow var(--transition),
+    transform var(--transition),
+    background var(--transition),
+    border-color var(--transition);
+
+  /* Crisp text rendering */
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* ---------- Digit buttons ---------- */
+.btn-num {
+  text-shadow: 0 0 6px rgba(57,255,20,0.5);
+}
+
+/* ---------- Function buttons (AC, DEL, %) ---------- */
+.btn-func {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  border-color: rgba(57,255,20,0.6);
+  color: rgba(57,255,20,0.85);
+}
+
+/* ---------- Operator buttons ---------- */
+.btn-op {
+  font-size: 1.25rem;
+  border-color: var(--green);
+  color: var(--green);
+  text-shadow: 0 0 10px var(--green);
+  box-shadow:
+    0 4px 0 rgba(57,255,20,0.3),
+    0 0 10px rgba(57,255,20,0.2),
+    inset 0 0 8px rgba(57,255,20,0.05);
+}
+
+/* ---------- Equals button — spans 2 columns ---------- */
+.btn-eq {
+  grid-column: span 2;
+  font-size: 1.4rem;
+  background: rgba(57,255,20,0.08);
+  border: 1.5px solid var(--green);
+  color: var(--green);
+  text-shadow:
+    0 0 10px var(--green),
+    0 0 20px rgba(57,255,20,0.6);
+  box-shadow:
+    0 4px 0 rgba(57,255,20,0.35),
+    0 0 14px rgba(57,255,20,0.25),
+    inset 0 0 12px rgba(57,255,20,0.08);
+}
+
+/* ---------- Hover States ---------- */
+.btn:hover {
+  background: rgba(57,255,20,0.1);
+  box-shadow:
+    0 4px 0 rgba(57,255,20,0.3),
+    0 0 14px rgba(57,255,20,0.35),
+    0 0 28px rgba(57,255,20,0.1);
+  border-color: var(--green);
+  transform: translateY(-1px);
+}
+
+.btn-op:hover {
+  box-shadow:
+    0 4px 0 rgba(57,255,20,0.4),
+    0 0 18px rgba(57,255,20,0.55),
+    0 0 36px rgba(57,255,20,0.2),
+    inset 0 0 10px rgba(57,255,20,0.1);
+}
+
+.btn-eq:hover {
+  background: rgba(57,255,20,0.15);
+  box-shadow:
+    0 4px 0 rgba(57,255,20,0.45),
+    0 0 22px rgba(57,255,20,0.6),
+    0 0 44px rgba(57,255,20,0.25),
+    inset 0 0 16px rgba(57,255,20,0.12);
+}
+
+/* ---------- Active / Press State ---------- */
+.btn:active,
+.btn.pressed {
+  transform: translateY(3px) scale(0.97);
+  box-shadow:
+    0 1px 0 rgba(57,255,20,0.25),
+    0 0 8px rgba(57,255,20,0.3);
+}
+
+/* ---------- Ripple Effect ---------- */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(57,255,20,0.25);
+  transform: scale(0);
+  animation: rippleAnim 0.5s linear;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ---------- Error State ---------- */
+.display-result.error {
+  color: var(--green);
+  font-size: 1.6rem;
+  animation: errorShake 0.35s ease;
+}
+
+@keyframes errorShake {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(-6px); }
+  40%  { transform: translateX(6px); }
+  60%  { transform: translateX(-4px); }
+  80%  { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+/* ---------- Footer ---------- */
+.calc-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.footer-text {
+  font-size: 0.48rem;
+  letter-spacing: 0.35em;
+  color: rgba(57,255,20,0.3);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.footer-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(57,255,20,0.25), transparent);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 400px) {
+  .calc-wrapper {
+    padding: 14px 12px 12px;
+  }
+
+  .btn {
+    height: 52px;
+    font-size: 0.95rem;
+  }
+
+  .btn-func {
+    font-size: 0.75rem;
+  }
+
+  .display-result {
+    font-size: 2rem;
+  }
+
+  .btn-grid {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 320px) {
+  .btn {
+    height: 46px;
+    font-size: 0.88rem;
+  }
+
+  .display-result {
+    font-size: 1.7rem;
+  }
+
+  .btn-grid {
+    gap: 6px;
+  }
+}
+
+/* ---------- Reduced Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
